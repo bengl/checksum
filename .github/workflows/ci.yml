@@ -1,0 +1,21 @@
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [0.6.21, 0.8.28, 0.10.48, 0.11.16]
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+      - name: Install Node.js
+        shell: bash -l -eo pipefail {0}
+        run: nvm install ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm test
